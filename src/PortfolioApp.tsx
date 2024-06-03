@@ -1,11 +1,11 @@
+import { NavBarApp } from "./presentation/components"
+
 
 
 export const PortfolioApp = () => {
   return (
-    <>
-      <div>
-        <h1>Jorge Yael CB</h1>
-      </div>
-    </>
+    <div className="max-w-7xl mx-auto">
+      <NavBarApp/>
+    </div>
   )
 }
