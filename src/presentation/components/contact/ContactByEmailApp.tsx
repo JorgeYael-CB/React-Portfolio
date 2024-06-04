@@ -24,9 +24,10 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
     email: '',
     subject: '',
     message: '',
+    phoneNumber: 0,
   });
 
-  const { email, message, fullName, subject } = contactData;
+  const { email, message, fullName, subject , phoneNumber} = contactData;
   const { error, messageError, messageSucces, succes } = responseApp;
 
 
@@ -55,16 +56,17 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
   useEffect(() => {
 
     if( succes && !error )
-      setContactData({ fullName: '', email: '', subject: '', message: '' });
+      setContactData({ fullName: '', email: '', subject: '', message: '', phoneNumber: 0 });
 
   }, [succes, error]);
 
 
   return (
-    <>
-        <div className="flex items-center justify-center p-12">
+    <div className="shadow-md rounded-md max-w-3xl mx-auto bg-gray-50 py-3 mt-8">
+        <h2 className="text-center text-black text-3xl">Contact me</h2>
+        <div className="flex items-center justify-center p-10">
           <div className="mx-auto w-full max-w-[550px]">
-            <form onSubmit={ onSubmit }>
+            <form id="contact" onSubmit={ onSubmit }>
               <div className="mb-5">
                 <label
                   htmlFor="fullName"
@@ -118,6 +120,23 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
               </div>
               <div className="mb-5">
                 <label
+                  htmlFor="phoneNumber"
+                  className="mb-3 block text-base font-medium text-[#07074D]"
+                >
+                  Phone Number <span className="opacity-50 ml-2 text-sm">**Optional**</span>
+                </label>
+                <input
+                  value={ phoneNumber }
+                  onChange={ onChange }
+                  type="number"
+                  name="phoneNumber"
+                  id="phoneNumber"
+                  placeholder="Enter your Phone Number"
+                  className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                />
+              </div>
+              <div className="mb-5">
+                <label
                   htmlFor="message"
                   className="mb-3 block text-base font-medium text-[#07074D]"
                 >
@@ -149,7 +168,7 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
             </form>
           </div>
         </div>
-    </>
+    </div>
   )
 }
 
