@@ -2,6 +2,6 @@ export interface ResponseApiInterface {
   error: boolean;
   succes: boolean;
 
-  messageError:string[] | undefined;
-  messageSucces:string[] | undefined;
+  messageError:string | undefined;
+  messageSucces:string | undefined;
 };

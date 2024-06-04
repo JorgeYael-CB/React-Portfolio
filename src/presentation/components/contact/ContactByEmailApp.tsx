@@ -1,5 +1,7 @@
-import { ChangeEvent, FormEvent, useState } from "react"
-import { ResponseApiInterface } from "../../../interfaces";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react"
+import { ContactData, ResponseApiInterface } from "../../../interfaces";
+import { AlertApp } from "../messages/AlertApp";
+import { LoadingApp } from "../loadings/LoadingApp";
 
 
 
@@ -7,15 +9,9 @@ interface Props {
   callback: ( data:ContactData ) => Promise<ResponseApiInterface>;
 }
 
-interface ContactData {
-  name: string,
-  email: string,
-  subject: string,
-  message: string,
-};
-
 
 export const ContactByEmailApp = ( { callback }: Props ) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [responseApp, setResponseApp] = useState<ResponseApiInterface>({
     error: false,
     succes: false,
@@ -24,14 +20,14 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
   });
 
   const [contactData, setContactData] = useState({
-    name: '',
+    fullName: '',
     email: '',
     subject: '',
     message: '',
   });
 
-  const { email, message, name, subject } = contactData;
-  // const { error, messageError, messageSucces, succes } = responseApp;
+  const { email, message, fullName, subject } = contactData;
+  const { error, messageError, messageSucces, succes } = responseApp;
 
 
 
@@ -47,9 +43,21 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
   const onSubmit = async ( e:FormEvent<HTMLFormElement> ) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     const data = await callback(contactData);
     setResponseApp( data );
+
+    setIsLoading( false );
   };
+
+
+  useEffect(() => {
+
+    if( succes && !error )
+      setContactData({ fullName: '', email: '', subject: '', message: '' });
+
+  }, [succes, error]);
 
 
   return (
@@ -59,17 +67,17 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
             <form onSubmit={ onSubmit }>
               <div className="mb-5">
                 <label
-                  htmlFor="name"
+                  htmlFor="fullName"
                   className="mb-3 block text-base font-medium text-[#07074D]"
                 >
                   Full Name <span className="opacity-50 ml-2 text-sm">**Required**</span>
                 </label>
                 <input
-                  value={ name }
+                  value={ fullName }
                   onChange={ onChange }
                   type="text"
                   name="name"
-                  id="name"
+                  id="fullName"
                   placeholder="Full Name"
                   className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                 />
@@ -126,12 +134,18 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
                 ></textarea>
               </div>
               <div>
-                <button
-                  className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none"
-                >
-                  Submit
-                </button>
+                {
+                  !isLoading
+                  ? <button className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none" > Submit </button>
+                  : <LoadingApp/>
+                }
               </div>
+
+              {
+                error && !succes
+                ? <AlertApp message={`${messageError}`} errorAlert/>
+                : succes && (<AlertApp message={ `${messageSucces}` } succesAlert/>)
+              }
             </form>
           </div>
         </div>
