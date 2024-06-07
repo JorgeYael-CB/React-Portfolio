@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 
 
-export const AdddQuestionApp = () => {
+export const AddQuestionApp = () => {
   const [isOpenCodeModal, setIsOpenCodeModal] = useState<boolean>(false);
   const [isOpenUserModal, setIsOpenUserModal] = useState<boolean>(false);
   const [codeVerify, setCodeVerify] = useState<number>(123456);
@@ -26,14 +26,12 @@ export const AdddQuestionApp = () => {
 
 
   const onCloseCodeModal = () => {
-    console.log('Cerraste el modal...');
     setIsOpenCodeModal(false);
   }
 
 
   const onCloseUserModal = () => {
     setIsOpenUserModal( false );
-    console.log('Cerraste el modal de user data');
   };
 
 
@@ -41,7 +39,7 @@ export const AdddQuestionApp = () => {
     // TODO: verificamos el código que ingreso
     if( code !== codeVerify ){
       setErrorCodeVerify( true )
-      setMessageErrorCodeVerify('El código no coincide');
+      setMessageErrorCodeVerify('The code does not match');
       return;
     }
 
