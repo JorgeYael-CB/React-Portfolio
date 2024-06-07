@@ -4,6 +4,7 @@ import { getAllQuestionsUseCase } from "../../../core/use-cases";
 import { LoadingApp } from '../loadings/LoadingApp';
 import { QuestionApp } from "./QuestionApp";
 import { AlertApp } from "../messages/AlertApp";
+import { AdddQuestionApp } from "./AdddQuestionApp";
 
 
 
@@ -34,7 +35,7 @@ export const QuestionsApp = () => {
   };
 
   const prevPageValidate = ():boolean => {
-    return page <= 0!;
+    return page <= minPage!;
   };
 
   const nextPage = () => {
@@ -57,6 +58,8 @@ export const QuestionsApp = () => {
 
   return (
     <div className="my-24">
+      <h2 className="text-center text-4xl font-semibold text-blue-600 mb-16">Questions and reviews</h2>
+
       {
         loading
         ?
@@ -70,6 +73,8 @@ export const QuestionsApp = () => {
           ))
           : <AlertApp message="There are currently no questions" infoAlert/>
       }
+
+    <AdddQuestionApp/>
 
     {
       data

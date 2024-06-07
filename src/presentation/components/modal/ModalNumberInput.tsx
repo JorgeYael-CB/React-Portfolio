@@ -1,12 +1,9 @@
 // Modal.tsx
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { AlertApp } from '../messages/AlertApp';
 
 
-type onClose = (
-  isOpen: boolean,
-  setIsOpen: ( IsOpen:boolean ) => void,
-) => void;
-
+type onClose = () => void;
 
 interface ModalProps {
   isOpen: boolean;
@@ -14,11 +11,23 @@ interface ModalProps {
   onCodeSubmit: (code: number) => void;
   title?:string;
   text?:string;
-  maxLength?:number
+  maxLength?:number;
+  customError?: CustomError;
 };
 
+interface CustomError {
+  messageError:string;
+  infoAlert?:boolean;
+  errorAlert?:boolean;
+  succesAlert?:boolean;
+  show: boolean;
+}
 
-export const ModalNumberInput: FC<ModalProps> = ({ isOpen, onClose, onCodeSubmit, title = 'Enter Authentication Code', text = '', maxLength = 6 }) => {
+
+
+export const ModalNumberInput: FC<ModalProps> = (
+  { isOpen, onClose, onCodeSubmit, title = 'Enter Authentication Code', text = '', maxLength = 6, customError }
+) => {
   const [code, setCode] = useState<number>(0);
   const [IsOpen, setIsOpen] = useState<boolean>(isOpen);
 
@@ -35,9 +44,10 @@ export const ModalNumberInput: FC<ModalProps> = ({ isOpen, onClose, onCodeSubmit
     setCode( +value );
   };
 
-  const onClickClose = () => {
-    onClose( isOpen, setIsOpen );
-  };
+
+  useEffect(() => {
+    setIsOpen( isOpen );
+  }, [isOpen, IsOpen]);
 
 
   if (!IsOpen) return null;
@@ -60,11 +70,26 @@ export const ModalNumberInput: FC<ModalProps> = ({ isOpen, onClose, onCodeSubmit
             onChange={ onChange }
             className="border p-2 mb-4 w-full"
           />
+
+          {
+            (customError && customError.show)
+            &&
+            <AlertApp
+              message={ customError.messageError }
+              errorAlert={ customError.errorAlert }
+              infoAlert={ customError.infoAlert }
+              succesAlert={ customError.succesAlert }
+            />
+          }
+
           <div className="flex justify-end">
             <button type="submit" className="bg-blue-500 text-white p-2 rounded mr-2">
               Submit
             </button>
-            <button onClick={  onClickClose } className="bg-gray-500 text-white p-2 rounded">
+            <button onClick={ e => {
+              e.preventDefault()
+              onClose()
+            }} className="bg-gray-500 text-white p-2 rounded">
               Close
             </button>
           </div>

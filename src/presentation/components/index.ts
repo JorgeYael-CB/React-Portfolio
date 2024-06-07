@@ -5,3 +5,5 @@ export * from './loadings/LoadingApp';
 
 export * from './about-me/AboutMeApp';
 export * from './about-me/SkillsApp';
+export * from './modal/ModalInputTextApp'
+export * from './modal/GenericModal'
