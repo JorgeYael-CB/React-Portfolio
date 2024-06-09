@@ -158,6 +158,8 @@ export const AddQuestionApp = () => {
           titleTex="title"
           text="Please enter your question or review details and it will be answered as soon as possible."
           title="DevComplete Studios"
+          typeTextModal="text"
+          typeTitleModal="Textarea"
           customError={ {messageError: errorMessageQuestion!, show:errorQuestion, errorAlert:true  } }
         />
       }
@@ -188,6 +190,8 @@ export const AddQuestionApp = () => {
               titleTitle="Email"
               text="Please enter your details to be able to add comments."
               title="DevComplete Studios"
+              typeTextModal="text"
+              typeTitleModal="email"
               customError={{ messageError:messageErrorUserData, show:errorUserData, errorAlert:true }}
             />
           </>

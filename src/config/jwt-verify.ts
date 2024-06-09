@@ -1,11 +1,5 @@
 
 
-interface GetValidateTokenProps {
-  token?:string;
-  payload?:string;
-  isValidToken:boolean;
-}
-
 
 export class JwtVerifyAdapter {
 

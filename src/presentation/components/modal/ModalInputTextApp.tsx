@@ -13,6 +13,8 @@ interface UserModalProps {
   customError?: CustomError;
   titleTex?:string;
   titleTitle?:string;
+  typeTextModal: 'Textarea' | 'email' | 'text';
+  typeTitleModal: 'Textarea' | 'email' | 'text';
 }
 
 interface CustomError {
@@ -26,7 +28,7 @@ interface CustomError {
 
 
 export const ModalInputText: FC<UserModalProps> = (
-  { isOpen, onClose, onSubmit, title = 'User Information', text = 'Please enter the data', titleInitialValue = '', textInitialValue = '', customError, titleTex, titleTitle }
+  { isOpen, onClose, onSubmit, typeTitleModal, title = 'User Information', text = 'Please enter the data', titleInitialValue = '', textInitialValue = '', customError, titleTex, titleTitle, typeTextModal }
 ) => {
   const [name, setName] = useState<string>(textInitialValue);
   const [email, setEmail] = useState<string>(titleInitialValue);
@@ -39,11 +41,11 @@ export const ModalInputText: FC<UserModalProps> = (
     onSubmit(name, email);
   };
 
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setName(e.target.value);
   };
 
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEmail(e.target.value);
   };
 
@@ -69,14 +71,25 @@ export const ModalInputText: FC<UserModalProps> = (
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="text">
                 { titleTex }
               </label>
-              <input
-                type="text"
-                id="text"
-                value={name}
-                onChange={ handleNameChange }
-                className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+              {
+                typeTextModal === 'email' || typeTextModal === 'text'
+                  ?
+                    <input
+                      type={ typeTextModal === 'text' ? 'text' : 'email' }
+                      id="text"
+                      value={name}
+                      onChange={ handleNameChange }
+                      className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                :
+                <textarea
+                  id="text"
+                  value={name}
+                  onChange={ handleNameChange }
+                  className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                </textarea>
+              }
             </div>
           }
 
@@ -87,13 +100,25 @@ export const ModalInputText: FC<UserModalProps> = (
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
                 { titleTitle }
               </label>
-              <input
-                type="text"
-                id="title"
-                value={email}
-                onChange={handleEmailChange}
-                className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              {
+                typeTitleModal === 'email' || typeTitleModal === 'text'
+                ?
+                  <input
+                    type={ typeTitleModal === 'text' ? 'text' : 'email' }
+                    id="title"
+                    value={ email }
+                    onChange={ handleEmailChange }
+                    className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                :
+                <textarea
+                  id="title"
+                  value={ email }
+                  onChange={ handleEmailChange }
+                  className="resize-none border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                </textarea>
+              }
             </div>
           }
 
