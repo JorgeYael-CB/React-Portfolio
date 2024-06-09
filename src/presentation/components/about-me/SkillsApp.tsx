@@ -18,11 +18,11 @@ export const SkillsApp = () => {
 
   return (
     <div className="mt-12 mb-36 py-6 px-4 shadow-sm bg-gray-100 rounded-sm" id="skills">
-      <h3 className="text-center mb-6 text-black md:text-4xl text-3xl font-bold md:my-4 my-12">Skills</h3>
+      <h3 className="text-center text-black md:text-4xl text-3xl font-bold my-12">Skills</h3>
 
       <div
         ref={ ref }
-        className={`flex flex-wrap justify-center sm:justify-start gap-4 ${isView ? 'animate__animated animate__fadeInUp' : ''}`}
+        className={`flex flex-wrap justify-center sm:justify-start gap-3 ${isView ? 'animate__animated animate__fadeInUp' : ''}`}
       >
         {skills.map(skill => (
           <SkillApp key={skill} skill={skill} />
