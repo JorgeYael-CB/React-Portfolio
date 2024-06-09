@@ -22,7 +22,7 @@ export const SkillsApp = () => {
 
       <div
         ref={ ref }
-        className={`flex flex-wrap justify-center sm:justify-start gap-4 ${isView ? 'animate__animated animate__fadeInRight' : ''}`}
+        className={`flex flex-wrap justify-center sm:justify-start gap-4 ${isView ? 'animate__animated animate__fadeInUp' : ''}`}
       >
         {skills.map(skill => (
           <SkillApp key={skill} skill={skill} />

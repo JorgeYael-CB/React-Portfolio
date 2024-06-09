@@ -1,4 +1,3 @@
-import { QuestionsApp } from "../questions/QuestionsApp"
 import { SkillsApp } from "./SkillsApp"
 
 export const AboutMeApp = () => {
@@ -20,7 +19,6 @@ export const AboutMeApp = () => {
       </div>
 
       <SkillsApp/>
-      <QuestionsApp/>
     </div>
   )
 }

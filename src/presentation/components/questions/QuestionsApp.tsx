@@ -59,10 +59,19 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="mt-12 mb-32" id="questions">
+    <div className="mt-28 mb-32" id="questions">
       <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
       <AddQuestionApp/>
+
+      {
+        data
+        &&
+        <div className="flex items-center justify-center mt-14 mb-8">
+          <input onChange={ () => {}} disabled={ loading || questionsPagination!.elements.length <= 1 } checked={ moreRecent } onClick={ () => setMoreRecent( prevValue => !prevValue ) } id="link-radio" type="radio" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+          <label htmlFor="link-radio" className="ms-2 text-sm font-medium text-gray-900">Sort by most recent</label>
+        </div>
+      }
 
       {
         loading
@@ -78,10 +87,9 @@ export const QuestionsApp = () => {
           : <AlertApp message="There are currently no questions" infoAlert/>
       }
 
-    {
-      data
-      &&
-      <div className="flex md:flex-row-reverse md:gap-24 flex-col justify-center items-center gap-8">
+      {
+        data
+        &&
         <PaginationTemplateApp
           isLoading={loading}
           nextPage={ nextPage }
@@ -90,13 +98,7 @@ export const QuestionsApp = () => {
           prevPageValidation={ prevPageValidate }
           config={ {allElementsNumber: totelElements!, currentElements: questionsPagination!.elements.length, currentPage:page} }
         />
-
-        <div className="flex items-center">
-          <input onChange={ () => {}} disabled={ loading || questionsPagination!.elements.length <= 1 } checked={ moreRecent } onClick={ () => setMoreRecent( prevValue => !prevValue ) } id="link-radio" type="radio" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-          <label htmlFor="link-radio" className="ms-2 text-sm font-medium text-gray-900">Sort by most recent</label>
-        </div>
-      </div>
-    }
+      }
 
     </div>
   )
