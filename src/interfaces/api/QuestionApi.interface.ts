@@ -1,3 +1,4 @@
+import { AnswerApiInterface } from "./AnswerApi.interface";
 import { UserApiInterface } from "./UserApi.interface";
 
 export interface QuestionApiInterface {
@@ -7,5 +8,5 @@ export interface QuestionApiInterface {
   question: string;
   date: Date,
   user: UserApiInterface,
-  answers: [];
+  answers: AnswerApiInterface[];
 }
