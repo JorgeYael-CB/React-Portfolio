@@ -2,7 +2,7 @@ import { envs } from "../../config";
 import { ValidateJwtInterface } from "../../interfaces";
 
 
-export const validateJwtUseCase = async( token:string, urlApi = '/users/validate-jwt' ):Promise< ValidateJwtInterface > => {
+export const validateJwtUseCase = async( token:string, urlApi = '/users/verify-jwt' ):Promise< ValidateJwtInterface > => {
   const url = `${envs.API_URL}${urlApi}`;
 
   const res = await fetch(url, {

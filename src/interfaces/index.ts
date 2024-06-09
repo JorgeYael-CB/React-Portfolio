@@ -6,3 +6,4 @@ export * from './api/GetAllQuestionApi.interface';
 export * from './api/AddEmailApi.interface';
 export * from './api/VerifyEmailApi.interface';
 export * from './api/validate-jwt.interface'
+export * from './api/AddQuestionApi.interface'

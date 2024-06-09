@@ -1,15 +1,18 @@
-import { EnterVerifyDataUseCase } from "../../../core/use-cases";
+import { EnterVerifyDataUseCase, addQuestionUseCase } from "../../../core/use-cases";
 import { verifyUserEmailUseCase } from "../../../core/use-cases/verify-user-email.useCase";
+import { AuthContext } from "../../providers/auth/AuthProvider";
 import { LoadingApp } from "../loadings/LoadingApp";
 import { GenericModal } from "../modal/GenericModal";
 import { ModalInputText } from "../modal/ModalInputTextApp";
 import { ModalNumberInput } from "../modal/ModalNumberInput";
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 
 
 
 export const AddQuestionApp = () => {
+  const { isLogged, login, token } = useContext( AuthContext );
+
   const [isOpenCodeModal, setIsOpenCodeModal] = useState<boolean>(false);
   const [isOpenUserModal, setIsOpenUserModal] = useState<boolean>(false);
   const [codeVerify, setCodeVerify] = useState<number>(123456);
@@ -23,6 +26,17 @@ export const AddQuestionApp = () => {
 
   const [messageErrorCodeVerify, setMessageErrorCodeVerify] = useState('');
   const [errorCodeVerify, setErrorCodeVerify] = useState(false);
+
+  const [bearerToken, setBearerToken] = useState<string>();
+
+  const [showModalQuestion, setShowModalQuestion] = useState(false);
+  const [titleQuestion, setTitleQuestion] = useState<string>();
+  const [questionText, setQuestionText] = useState<string>();
+  const [errorQuestion, setErrorQuestion] = useState(false);
+  const [errorMessageQuestion, setErrorMessageQuestion] = useState<string>();
+
+
+
 
 
   const onCloseCodeModal = () => {
@@ -46,7 +60,7 @@ export const AddQuestionApp = () => {
     setIsLoading(true);
 
     // TODO: verificamos su cuenta
-    const res = await verifyUserEmailUseCase({email: userEmail});
+    const res = await verifyUserEmailUseCase({email: userEmail, token: bearerToken!});
 
     if( res.error ){
       setErrorCodeVerify( true );
@@ -55,11 +69,13 @@ export const AddQuestionApp = () => {
       return;
     };
 
-
     setErrorCodeVerify( false );
     setIsOpenCodeModal(false);
 
-    // TODO: guardar el token (localstorage o en memoria) y mandar la información del usuario en un estado global para acceder a el desde cualquier lugar
+    // TODO: iniciamos sesión del usuario
+    await login(bearerToken!);
+
+    setShowModalQuestion(true);
 
     setIsLoading(false);
   };
@@ -81,6 +97,7 @@ export const AddQuestionApp = () => {
 
         setErrorUserData( data.error );
         setMessageErrorUserData('');
+        setBearerToken( data.token );
 
         setCodeVerify( Number(data.codeVerify!) );
         setIsOpenUserModal( false );
@@ -90,37 +107,93 @@ export const AddQuestionApp = () => {
   };
 
   const onClick = () => {
-    // TODO: mostrar modal para que ingree los datos de su cuenta
+    if( isLogged ){
+      // TODO: mostramos el modal si esta verificado
+      setShowModalQuestion(true);
+      return;
+    }
+
     setIsOpenUserModal( true );
   };
 
 
 
+  const onSubmitModalQuestion = async( titleQuestion:string, question:string ) => {
+    setQuestionText( question );
+    setTitleQuestion( titleQuestion )
+    setIsLoading(true);
+
+    // TODO: hacer la peticiom HTTP
+    const res = await addQuestionUseCase({question: {question: question, title: titleQuestion}, token});
+
+    if( res.error ){
+      setErrorQuestion(true);
+      setErrorMessageQuestion(res.messageError);
+      setIsLoading(false);
+      return;
+    }
+
+    setErrorQuestion(false);
+    setShowModalQuestion(false);
+    setQuestionText('');
+    setTitleQuestion('')
+    setIsLoading(false);
+  }
+
+
+
   return (
     <div>
+
+      {
+        (showModalQuestion && !isLoading)
+        &&
+        <ModalInputText
+          isOpen={showModalQuestion}
+          onClose={ () => setShowModalQuestion(false) }
+          onSubmit={ onSubmitModalQuestion }
+          textInitialValue={ questionText }
+          titleInitialValue={ titleQuestion }
+          titleTitle="Question"
+          titleTex="title"
+          text="Please enter your question or review details and it will be answered as soon as possible."
+          title="DevComplete Studios"
+          customError={ {messageError: errorMessageQuestion!, show:errorQuestion, errorAlert:true  } }
+        />
+      }
+
       {
         !isLoading
         ?
         <>
-          <ModalNumberInput
-            isOpen={ isOpenCodeModal }
-            onClose={ onCloseCodeModal }
-            onCodeSubmit={ onCodeSubmitCodeModal }
-            text="A verification code has been sent to your email to verify your account."
-            customError={ {messageError: messageErrorCodeVerify, infoAlert:true, show: errorCodeVerify} }
-          />
+        {
+          !showModalQuestion
+          &&
+          <>
+            <ModalNumberInput
+              isOpen={ isOpenCodeModal }
+              onClose={ onCloseCodeModal }
+              onCodeSubmit={ onCodeSubmitCodeModal }
+              text="A verification code has been sent to your email to verify your account."
+              customError={ {messageError: messageErrorCodeVerify, infoAlert:true, show: errorCodeVerify} }
+            />
 
-          <ModalInputText
-            isOpen={ isOpenUserModal }
-            onClose={ onCloseUserModal }
-            onSubmit={ onSubmitUserModal }
-            initialValueEmail={ userEmail }
-            initialValueName={ userName }
-            customError={{ messageError:messageErrorUserData, show:errorUserData, errorAlert:true }}
-          />
+            <ModalInputText
+              isOpen={ isOpenUserModal }
+              onClose={ onCloseUserModal }
+              onSubmit={ onSubmitUserModal }
+              textInitialValue={ userEmail }
+              titleInitialValue={ userName }
+              titleTex="Name"
+              titleTitle="Email"
+              text="Please enter your details to be able to add comments."
+              title="DevComplete Studios"
+              customError={{ messageError:messageErrorUserData, show:errorUserData, errorAlert:true }}
+            />
+          </>
+        }
         </>
-        :
-        <GenericModal children={ <LoadingApp/>}/>
+        : <GenericModal children={ <LoadingApp/>}/>
       }
 
       <p className="text-center my-8 font-normal">

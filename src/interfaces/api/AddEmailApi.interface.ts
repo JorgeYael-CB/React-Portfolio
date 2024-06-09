@@ -19,9 +19,10 @@ export interface AddEmailApiInterface {
 
   codeVerify?: number,
   codeRange?: number,
-  error: boolean,
-  succes: boolean,
-  messageSucces?:string
-  messageError?:string
+  error: boolean;
+  succes: boolean;
+  messageSucces?:string;
+  messageError?:string;
+  token?:string;
 
 }

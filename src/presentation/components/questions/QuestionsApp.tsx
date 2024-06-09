@@ -11,7 +11,7 @@ import { PaginationTemplateApp } from "../../template";
 
 export const QuestionsApp = () => {
   const [loading, setLoading] = useState(true);
-  const [limit, setLimit] = useState(5);
+  const [limit, _] = useState(5);
   const [page, setPage] = useState(0);
   const [moreRecent, setMoreRecent] = useState(false);
 
@@ -92,7 +92,7 @@ export const QuestionsApp = () => {
         />
 
         <div className="flex items-center">
-          <input onChange={ () => {}} disabled={ loading } checked={ moreRecent } onClick={ () => setMoreRecent( prevValue => !prevValue ) } id="link-radio" type="radio" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+          <input onChange={ () => {}} disabled={ loading || questionsPagination!.elements.length <= 0 } checked={ moreRecent } onClick={ () => setMoreRecent( prevValue => !prevValue ) } id="link-radio" type="radio" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
           <label htmlFor="link-radio" className="ms-2 text-sm font-medium text-gray-900">Sort by most recent</label>
         </div>
       </div>

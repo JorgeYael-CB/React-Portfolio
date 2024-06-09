@@ -8,9 +8,11 @@ interface UserModalProps {
   onSubmit: (name: string, email: string) => void;
   title?: string;
   text?: string;
-  initialValueEmail?:string
-  initialValueName?:string
+  titleInitialValue?:string
+  textInitialValue?:string
   customError?: CustomError;
+  titleTex?:string;
+  titleTitle?:string;
 }
 
 interface CustomError {
@@ -23,12 +25,11 @@ interface CustomError {
 
 
 
-
 export const ModalInputText: FC<UserModalProps> = (
-  { isOpen, onClose, onSubmit, title = 'User Information', text = 'Please enter your name and email', initialValueEmail = '', initialValueName = '', customError }
+  { isOpen, onClose, onSubmit, title = 'User Information', text = 'Please enter the data', titleInitialValue = '', textInitialValue = '', customError, titleTex, titleTitle }
 ) => {
-  const [name, setName] = useState<string>(initialValueName);
-  const [email, setEmail] = useState<string>(initialValueEmail);
+  const [name, setName] = useState<string>(textInitialValue);
+  const [email, setEmail] = useState<string>(titleInitialValue);
   const [modalOpen, setModalOpen] = useState<boolean>(isOpen);
 
 
@@ -57,35 +58,44 @@ export const ModalInputText: FC<UserModalProps> = (
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl mb-1 font-bold text-center"> {title} </h2>
         <p className='text-center text-sm font-normal mb-4'>
-          {text}
+          { text }
         </p>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={handleNameChange}
-              className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={handleEmailChange}
-              className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+
+          {
+            titleTex
+            &&
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="text">
+                { titleTex }
+              </label>
+              <input
+                type="text"
+                id="text"
+                value={name}
+                onChange={ handleNameChange }
+                className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+          }
+
+          {
+            titleTitle
+            &&
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+                { titleTitle }
+              </label>
+              <input
+                type="text"
+                id="title"
+                value={email}
+                onChange={handleEmailChange}
+                className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          }
 
           {
             (customError && customError.show)
