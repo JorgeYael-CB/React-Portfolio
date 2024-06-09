@@ -200,11 +200,11 @@ export const AddQuestionApp = () => {
         : <GenericModal children={ <LoadingApp/>}/>
       }
 
-      <p className="text-center my-8 font-normal">
+      <p className="text-center my-4 font-normal">
         Do you want to add a question or a positive review?
         <a
           onClick={ onClick }
-          className="underline text-blue-600 hover:cursor-pointer"> add it here</a>.
+          className="underline text-blue-600 hover:cursor-pointer font-semibold"> Add it here</a>.
       </p>
     </div>
   )

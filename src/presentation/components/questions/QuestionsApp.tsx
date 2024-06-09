@@ -59,8 +59,8 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="my-24">
-      <h2 className="text-center text-4xl font-semibold text-blue-600 mb-16">Questions and reviews</h2>
+    <div className="mt-12 mb-20">
+      <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
       <AddQuestionApp/>
 
