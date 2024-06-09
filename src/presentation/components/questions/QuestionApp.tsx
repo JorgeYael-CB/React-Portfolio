@@ -27,9 +27,9 @@ export const QuestionApp = ({ date, question, title, user, answers }: QuestionAp
         <p className="text-gray-700 whitespace-pre-line">{question}</p>
       </div>
       <div className="flex justify-end space-x-3">
-        <button className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+        {/* <button className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
           Add Answer
-        </button>
+        </button> */}
         <button onClick={onShowAnswers} disabled={allAnswersCount <= 0} className="disabled:opacity-60 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
           {`${ showAnswers ? 'Hide' : 'Show' } +${allAnswersCount} Answers`}
         </button>
