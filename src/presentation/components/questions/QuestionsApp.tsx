@@ -73,7 +73,7 @@ export const QuestionsApp = () => {
           questionsPagination!.elements.length > 0
           ?
           questionsPagination!.elements.map( question => (
-            <QuestionApp key={question.id} answers={question.answers} date={question.date} id={question.id} question={question.question} title={question.title} user={question.user}/>
+              <QuestionApp key={question.id} answers={question.answers} date={question.date} id={question.id} question={question.question} title={question.title} user={question.user}/>
           ))
           : <AlertApp message="There are currently no questions" infoAlert/>
       }

@@ -200,11 +200,11 @@ export const AddQuestionApp = () => {
         : <GenericModal children={ <LoadingApp/>}/>
       }
 
-      <p className="text-center my-4 font-normal">
-        Do you want to add a question or a positive review?
+      <p className="text-center mt-2 mb-8 font-normal">
+        In this section you can see the questions and reviews, if you require it you can add them by
         <a
           onClick={ onClick }
-          className="underline text-blue-600 hover:cursor-pointer font-semibold"> Add it here</a>.
+          className="underline text-blue-600 hover:cursor-pointer font-semibold"> Clicking on this link</a>.
       </p>
     </div>
   )
