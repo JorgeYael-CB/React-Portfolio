@@ -59,7 +59,7 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="mt-12 mb-20">
+    <div className="mt-12 mb-32" id="questions">
       <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
       <AddQuestionApp/>
@@ -81,7 +81,7 @@ export const QuestionsApp = () => {
     {
       data
       &&
-      <div className="flex flex-row-reverse justify-center items-center gap-24">
+      <div className="flex md:flex-row-reverse md:gap-24 flex-col justify-center items-center gap-8">
         <PaginationTemplateApp
           isLoading={loading}
           nextPage={ nextPage }
