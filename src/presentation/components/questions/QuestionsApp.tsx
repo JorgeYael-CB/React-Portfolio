@@ -13,7 +13,7 @@ export const QuestionsApp = () => {
   const [loading, setLoading] = useState(true);
   const [limit, _] = useState(5);
   const [page, setPage] = useState(0);
-  const [moreRecent, setMoreRecent] = useState(false);
+  const [moreRecent, setMoreRecent] = useState(true);
 
   const [data, setData] = useState<GetAllQuestionsApiInterface>();
   let error, questionsPagination, succes;
@@ -59,7 +59,7 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="mt-28 mb-32" id="questions">
+    <div className="mt-28 mb-32 bg-white py-12 px-4 shadow-md rounded-md" id="questions">
       <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
       <AddQuestionApp/>
@@ -67,7 +67,7 @@ export const QuestionsApp = () => {
       {
         data
         &&
-        <div className="flex items-center justify-center mt-14 mb-8">
+        <div className="flex items-center md:justify-center justify-start px-4 mt-14 mb-8">
           <input onChange={ () => {}} disabled={ loading || questionsPagination!.elements.length <= 1 } checked={ moreRecent } onClick={ () => setMoreRecent( prevValue => !prevValue ) } id="link-radio" type="radio" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
           <label htmlFor="link-radio" className="ms-2 text-sm font-medium text-gray-900">Sort by most recent</label>
         </div>
@@ -82,7 +82,7 @@ export const QuestionsApp = () => {
           questionsPagination!.elements.length > 0
           ?
           questionsPagination!.elements.map( question => (
-              <QuestionApp key={question.id} answers={question.answers} date={question.date} id={question.id} question={question.question} title={question.title} user={question.user}/>
+            <QuestionApp key={question.id} answers={question.answers} date={question.date} id={question.id} question={question.question} title={question.title} user={question.user}/>
           ))
           : <AlertApp message="There are currently no questions" infoAlert/>
       }

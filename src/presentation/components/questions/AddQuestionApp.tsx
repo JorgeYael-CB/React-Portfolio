@@ -200,7 +200,7 @@ export const AddQuestionApp = () => {
         : <GenericModal children={ <LoadingApp/>}/>
       }
 
-      <p className="text-center mt-2 mb-8 font-normal">
+      <p className="text-center mt-2 mb-8 font-normal px-4">
         In this section you can see the questions and reviews, if you require it you can add them by
         <a
           onClick={ onClick }
