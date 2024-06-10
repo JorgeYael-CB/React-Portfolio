@@ -17,7 +17,7 @@ export const QuestionsApp = () => {
 
   const [data, setData] = useState<GetAllQuestionsApiInterface>();
   let error, questionsPagination, succes;
-  let maxPage, minPage, totelElements;
+  let maxPage, minPage, allElementsCount;
 
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const QuestionsApp = () => {
 
   if (data) {
     ({ error, questionsPagination, succes } = data);
-    ({ maxPage, minPage, totelElements } = questionsPagination);
+    ({ maxPage, minPage, allElementsCount } = questionsPagination);
   };
 
   return (
@@ -96,7 +96,7 @@ export const QuestionsApp = () => {
           prevPage={ prevPage }
           nextPageValidation={ nextPageValidate }
           prevPageValidation={ prevPageValidate }
-          config={ {allElementsNumber: totelElements!, currentElements: questionsPagination!.elements.length, currentPage:page} }
+          config={ {allElementsNumber: allElementsCount!, currentElements: questionsPagination!.elements.length, currentPage:page} }
         />
       }
 

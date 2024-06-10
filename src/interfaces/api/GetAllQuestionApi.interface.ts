@@ -5,7 +5,7 @@ export interface GetAllQuestionsApiInterface {
   succes: boolean,
   error: boolean,
   questionsPagination: {
-    totelElements: number,
+    allElementsCount: number,
     elements: QuestionApiInterface[],
     limit: number,
     page: number,
