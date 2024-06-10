@@ -18,7 +18,7 @@ export const PaginationTemplateApp = (
 ) => {
 
   return (
-    <div className="flex flex-col items-center my-4 space-y-2">
+    <div className="flex flex-col items-center mt-8 space-y-2">
       <span className="text-sm text-gray-700 dark:text-gray-400">
         Page: { currentPage + 1 } of { Math.ceil(allElementsNumber / currentElements) } - Questions: { currentElements }
       </span>
