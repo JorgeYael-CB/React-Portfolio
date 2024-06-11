@@ -2,15 +2,11 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { ContactData, ResponseApiInterface } from "../../../interfaces";
 import { AlertApp } from "../messages/AlertApp";
 import { LoadingApp } from "../loadings/LoadingApp";
+import { ContactByEmailUsecase } from "../../../core/use-cases";
 
 
 
-interface Props {
-  callback: ( data:ContactData ) => Promise<ResponseApiInterface>;
-}
-
-
-export const ContactByEmailApp = ( { callback }: Props ) => {
+export const ContactByEmailApp = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [responseApp, setResponseApp] = useState<ResponseApiInterface>({
     error: false,
@@ -31,7 +27,6 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
   const { error, messageError, messageSucces, succes } = responseApp;
 
 
-
   const onChange = ( e:ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
     const { target:{id, value} } = e;
 
@@ -46,7 +41,7 @@ export const ContactByEmailApp = ( { callback }: Props ) => {
 
     setIsLoading(true);
 
-    const data = await callback(contactData);
+    const data = await new ContactByEmailUsecase().byEmail(contactData);
     setResponseApp( data );
 
     setIsLoading( false );

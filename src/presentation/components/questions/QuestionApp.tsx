@@ -2,6 +2,9 @@ import { useState } from "react";
 import { QuestionApiInterface } from "../../../interfaces";
 import { AnswerApp } from "./AnswerApp"; // Asegúrate de importar tu componente de respuestas
 
+
+
+
 export const QuestionApp = ({ date, question, title, user, answers }: QuestionApiInterface) => {
   const formattedDate = new Date(date).toLocaleDateString('es-MX');
   const allAnswersCount = answers.length;
