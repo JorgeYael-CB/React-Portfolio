@@ -1,4 +1,4 @@
-type roles = 'ADMIN' | 'DEVELOPER' | 'USER' | 'SUPER_USER';
+import { UserApiInterface } from "./UserApi.interface"
 
 
 export interface AddQuestionApiInterface {
@@ -8,20 +8,15 @@ export interface AddQuestionApiInterface {
   messageSucces?: string
   messageError?: string
   newQuestion?: {
-      title: string,
-      id: string,
-      question: string,
-      date: Date,
-      user: {
-          _id: string,
-          email: string,
-          name: string,
-          verify: boolean,
-          isActive: boolean,
-          date: Date,
-          roles: roles[]
-      },
-      answers: []
+    title: string,
+    id: string,
+    question: string,
+    date: Date,
+    user: UserApiInterface,
+    answers: []
+    likes: UserApiInterface[],
+    stars: number,
+    edited: boolean,
   }
 
 }

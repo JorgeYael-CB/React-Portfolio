@@ -4,13 +4,15 @@ export interface GetAllQuestionsApiInterface {
 
   succes: boolean,
   error: boolean,
-  questionsPagination: {
+  questionsPagination?: {
     allElementsCount: number,
     elements: QuestionApiInterface[],
     limit: number,
     page: number,
     maxPage: number,
     minPage: number,
+    moreRecent:boolean;
   },
-  messageSucces:string,
+  messageSucces?:string,
+  messageError?:string,
 }

@@ -1,5 +1,5 @@
+import { roles } from "./RolesApi.type";
 
-type roles = 'USER' | 'ADMIN' | 'SUPER_USER' | 'DEVELOPER';
 
 export interface UserApiInterface {
   _id: string,

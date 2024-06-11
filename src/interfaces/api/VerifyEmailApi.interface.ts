@@ -1,19 +1,19 @@
 import { QuestionApiInterface } from './QuestionApi.interface';
+import { roles } from './RolesApi.type';
 
-
-type roles = 'USER' | 'ADMIN' | 'DEVELOPER' | 'SUPER_USER';
 
 
 export interface VerifyEmailApiInterface {
   user?: {
-      email: string;
-      id: string;
-      verify: boolean;
-      isActive: boolean;
-      date: Date;
-      roles: roles[];
-      questions: QuestionApiInterface[];
-      name: string;
+    email: string;
+    id: string;
+    verify: boolean;
+    isActive: boolean;
+    date: Date;
+    roles: roles[];
+    questions: QuestionApiInterface[];
+    name: string;
+    img?:string;
   },
   error: boolean;
   succes: boolean;
