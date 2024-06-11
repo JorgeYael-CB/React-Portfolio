@@ -1,25 +1,47 @@
 import { useContext, useState, useEffect } from "react";
 import { QuestionApiInterface } from "../../../interfaces";
-import { AnswerApp } from "./AnswerApp"; // Asegúrate de importar tu componente de respuestas
+import { AnswerApp } from "./AnswerApp";
 import { AuthContext } from "../../providers/auth/AuthProvider";
 import { AuthApp } from "../auth/AuthApp";
-import { addLikeQuestionUseCase, removeLikeQuestionUseCase } from "../../../core/use-cases";
 
-export const QuestionApp = ({ date, question, title, user, answers, likes, stars, id, _id }: QuestionApiInterface) => {
+import {
+  addAnswerToQuestionUseCase,
+  addLikeQuestionUseCase,
+  removeLikeQuestionUseCase,
+} from "../../../core/use-cases";
+import { AlertApp } from "../messages/AlertApp";
+
+
+export const QuestionApp = ({
+  date,
+  question,
+  title,
+  user,
+  answers,
+  likes,
+  stars,
+  id,
+  _id,
+}: QuestionApiInterface) => {
   const { isLogged, email, token } = useContext(AuthContext);
-  const formattedDate = new Date(date).toLocaleDateString('es-MX');
-  const allAnswersCount = answers.length;
+  const formattedDate = new Date(date).toLocaleDateString("es-MX");
   const [showAnswers, setShowAnswers] = useState(false);
   const [likesCount, setLikesCount] = useState(likes.length);
   const [isLiked, setIsLiked] = useState(false);
   const [starAuth, setStarAuth] = useState(false);
   const [isLoadingLike, setIsLoadingLike] = useState(false);
+  const [modeReply, setModeReply] = useState(false);
+  const [answer, setAnswer] = useState<string>("");
+  const [starAuthAnswer, setStarAuthAnswer] = useState(false);
 
-
+  const [isLoadingAnswer, setIsLoadingAnswer] = useState(false);
+  const [errorAnswer, setErrorAnswer] = useState<boolean>(false);
+  const [errorAnswerMessage, setErrorAnswerMessage] = useState<string>("");
+  const [answersState, setAnswersState] = useState<any[]>(answers);
 
   useEffect(() => {
     if (isLogged && email) {
-      const liked = likes.some(likeUser => likeUser.email === email);
+      const liked = likes.some((likeUser) => likeUser.email === email);
       setIsLiked(liked);
     }
   }, [likes, email, isLogged]);
@@ -28,63 +50,119 @@ export const QuestionApp = ({ date, question, title, user, answers, likes, stars
     setShowAnswers(!showAnswers);
   };
 
-  const onLike = ( bearerToken:string ) => {
-    if( isLoadingLike ) return;
+  const onLike = (bearerToken: string) => {
+    if (isLoadingLike) return;
     setIsLoadingLike(true);
 
-    if ( isLiked ) {
+    if (isLiked) {
       setLikesCount(likesCount - 1);
       setIsLiked(false);
-      removeLikeQuestionUseCase({questionId: id! || _id!, token: bearerToken ? bearerToken : token})
-        .then( () => setIsLoadingLike(false) )
-        .catch( () => setIsLoadingLike(false) );
+      removeLikeQuestionUseCase({
+        questionId: id! || _id!,
+        token: bearerToken ? bearerToken : token,
+      })
+        .then(() => setIsLoadingLike(false))
+        .catch(() => {
+          alert("Error! - Contact support");
+          setIsLoadingLike(false);
+        });
     } else {
       setLikesCount(likesCount + 1);
       setIsLiked(true);
-      addLikeQuestionUseCase({questionId: id! || _id!, token: bearerToken ? bearerToken : token })
-        .then( () => setIsLoadingLike(false))
-        .catch( () => setIsLoadingLike(false) );
+      addLikeQuestionUseCase({
+        questionId: id! || _id!,
+        token: bearerToken ? bearerToken : token,
+      })
+        .then(() => setIsLoadingLike(false))
+        .catch(() => {
+          alert("Error! - Contact support");
+          setIsLoadingLike(false);
+        });
     }
   };
 
   const onClick = () => {
-    if( !isLogged ){
-      setStarAuth( true );
+    if (!isLogged) {
+      setStarAuth(true);
       return;
     }
 
-    onLike( token )
-  }
+    onLike(token);
+  };
 
+  const onSendAnswer = (bearerToken?: string) => {
+    setIsLoadingAnswer(true);
 
+    addAnswerToQuestionUseCase({
+      answer,
+      questionId: id || _id!,
+      token: bearerToken ? bearerToken : token,
+    })
+      .then((data) => {
+        if (data.error) {
+          setErrorAnswer(true);
+          setErrorAnswerMessage(data.messageError!);
+          setIsLoadingAnswer(false);
+          return;
+        }
+
+        setErrorAnswer(false);
+        setIsLoadingAnswer(false);
+        setAnswersState([data.answer, ...answersState]);
+        setAnswer("");
+        setModeReply(false);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const sendAnswer = () => {
+    if (!answer || answer.trim().length <= 0) return;
+    if (!isLogged) {
+      setStarAuthAnswer(true);
+      return;
+    }
+
+    onSendAnswer();
+  };
 
   return (
     <>
+      {starAuth && (
+        <AuthApp succesLogin={(_, bearerToken) => onLike(bearerToken)} />
+      )}
 
-      {
-        starAuth
-        &&
-        <AuthApp succesLogin={ ( _, bearerToken ) => onLike(bearerToken) }/>
-      }
+      {starAuthAnswer && (
+        <AuthApp succesLogin={(_, bearerToken) => onSendAnswer(bearerToken)} />
+      )}
 
       <div className="max-w-2xl mx-auto my-2 mb-6 p-2 px-6 flex flex-col">
         <div className="flex justify-between items-center md:mb-0 mb-2">
           <div>
-            <p className="md:text-lg text-sm font-medium text-gray-500">{user.name}</p>
+            <p className="md:text-lg text-sm font-medium text-gray-500">
+              {user.name}
+            </p>
           </div>
-          <span className={`md:text-sm text-xs font-medium ${user.verify ? 'text-green-500' : 'text-red-500'}`}>
-            {user.verify ? 'Usuario Verificado' : 'Usuario No Verificado'}
+          <span
+            className={`md:text-sm text-xs font-medium ${
+              user.verify ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {user.verify ? "Usuario Verificado" : "Usuario No Verificado"}
           </span>
         </div>
 
         <div>
-          <h2 className="md:text-2xl text-lg font-semibold text-gray-900 md:mb-2 mb-1">{title}</h2>
+          <h2 className="md:text-2xl text-lg font-semibold text-gray-900 md:mb-2 mb-1">
+            {title}
+          </h2>
 
           <div className="flex items-center">
             {[...Array(5)].map((_, index) => (
               <svg
                 key={index}
-                className={`w-4 h-4 my-2 ms-1 ${index < stars ? 'text-yellow-300' : 'text-gray-300'}`}
+                className={`w-4 h-4 my-2 ms-1 ${
+                  index < stars ? "text-yellow-300" : "text-gray-300"
+                }`}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
@@ -95,13 +173,28 @@ export const QuestionApp = ({ date, question, title, user, answers, likes, stars
             ))}
           </div>
 
-          <p className="text-gray-700 whitespace-pre-line">{ question }</p>
+          <p className="text-gray-700 whitespace-pre-line">{question}</p>
 
           <div className="flex flex-row justify-between items-center my-2">
-            <p className="text-sm text-black opacity-50 font-medium mt-4">{formattedDate}</p>
+            <div className="flex md:gap-6 gap-4 items-center">
+              <p className="text-sm text-black opacity-50 font-medium">
+                {formattedDate}
+              </p>
+              <a
+                onClick={() => setModeReply(!modeReply)}
+                className="text-sm text-gray-500 font-normal hover:cursor-pointer"
+              >
+                Reply
+              </a>
+            </div>
 
             <div className="flex gap-2">
-              <button onClick={ onClick } className={`like-button ${isLiked ? 'animate__animated animate__heartBeat' : ''}`}>
+              <button
+                onClick={onClick}
+                className={`like-button ${
+                  isLiked ? "animate__animated animate__heartBeat" : ""
+                }`}
+              >
                 {isLiked ? (
                   <svg
                     className="w-5 h-5 text-red-500 border-black"
@@ -128,22 +221,56 @@ export const QuestionApp = ({ date, question, title, user, answers, likes, stars
                   </svg>
                 )}
               </button>
-              <p className="text-sm font-medium text-gray-400">{ likesCount }</p>
+              <p className="text-sm font-medium text-gray-400">{likesCount}</p>
             </div>
           </div>
         </div>
 
-        {
-          answers.length > 0
-          &&
-          <a onClick={onShowAnswers} className="text-gray-400 my-4 text-sm font-medium text-left hover:cursor-pointer">
-            --- {`${ showAnswers ? 'Hide' : 'Show' } ${allAnswersCount} ${allAnswersCount > 1 ? 'Answers': 'Answer'}`}
+        {modeReply && (
+          <div className="flex flex-col">
+            <div>
+              <input
+                onChange={(e) => setAnswer(e.target.value)}
+                value={answer}
+                type="text"
+                placeholder="Write your answer:"
+                className="animate__animated animate__fadeIn px-2 font-medium text-gray-600 py-1 mt-4 text-base mb-2 w-full focus:outline-none border-b-2 border-black"
+              />
+            </div>
+            <div className="flex justify-end gap-3 mb-2">
+              <button
+                onClick={sendAnswer}
+                disabled={isLoadingAnswer || answer.length <= 0}
+                className="disabled:opacity-50 px-4 py-1 rounded-md hover:cursor-pointer text-white bg-indigo-600"
+              >
+                Send
+              </button>
+              <button
+                disabled={isLoadingAnswer}
+                onClick={() => setModeReply(false)}
+                className="disabled:opacity-50 px-4 py-1 rounded-md hover:cursor-pointer text-white bg-black"
+              >
+                Cancel
+              </button>
+            </div>
+            {errorAnswer && <AlertApp message={errorAnswerMessage} errorAlert />}
+          </div>
+        )}
+
+        {answersState.length > 0 && (
+          <a
+            onClick={onShowAnswers}
+            className="text-gray-400 my-4 text-sm font-medium text-left hover:cursor-pointer"
+          >
+            --- {`${showAnswers ? "Hide" : "Show"} ${answersState.length} ${
+              answersState.length > 1 ? "Answers" : "Answer"
+            }`}
           </a>
-        }
+        )}
 
         {showAnswers && (
           <div className="mt-4">
-            {answers.map((answer, index) => (
+            {answersState.map((answer, index) => (
               <AnswerApp key={index} answerApp={answer} />
             ))}
           </div>

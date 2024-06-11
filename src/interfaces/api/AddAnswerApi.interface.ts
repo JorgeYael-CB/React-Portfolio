@@ -6,8 +6,6 @@ export interface AddAnswerApiInterface {
   error:boolean;
   succes:boolean;
   messageError?:string
-
-
   messageSucces: string,
   answer: {
     id: string,

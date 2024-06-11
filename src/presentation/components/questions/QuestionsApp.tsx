@@ -60,33 +60,26 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="md:my-56 my-44 bg-white py-12 px-4 shadow-md rounded-md" id="questions">
+    <div className="md:my-56 my-44 bg-white py-12 shadow-md rounded-md" id="questions">
       <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
       <AddQuestionApp addQuestionCallback={ (bool) => setAddQuestionBool(bool) }/>
 
-      {
-        data
-        &&
-        <div className="flex items-center md:justify-center justify-start px-4 mt-14 mb-8">
-          <input onChange={ () => {}} disabled={ loading || questionsPagination!.elements.length <= 1 } checked={ moreRecent } onClick={ () => setMoreRecent( prevValue => !prevValue ) } id="link-radio" type="radio" value="" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-          <label htmlFor="link-radio" className="ms-2 text-sm font-medium text-gray-900">Sort by most recent</label>
-        </div>
-      }
-
-      {
-        loading
-        ?
-        <LoadingApp/>
-        : (!error && succes)
-          &&
-          questionsPagination!.elements.length > 0
+      <div className="mt-16 max-w-4xl mx-auto">
+        {
+          loading
           ?
-          questionsPagination!.elements.map( question => (
-            <QuestionApp key={question.id} {...question}/>
-          ))
-          : <AlertApp message="There are currently no questions" infoAlert/>
-      }
+          <LoadingApp/>
+          : (!error && succes)
+            &&
+            questionsPagination!.elements.length > 0
+            ?
+            questionsPagination!.elements.map( question => (
+              <QuestionApp key={question.id} {...question}/>
+            ))
+            : <AlertApp message="There are currently no questions" infoAlert/>
+        }
+      </div>
 
       {
         data
