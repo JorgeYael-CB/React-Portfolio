@@ -1,4 +1,3 @@
-export * from './api/ResponseApi';
 export * from './contact/contact-data.interface'
 export * from './api/QuestionApi.interface';
 export * from './api/UserApi.interface';
@@ -7,3 +6,4 @@ export * from './api/AddEmailApi.interface';
 export * from './api/VerifyEmailApi.interface';
 export * from './api/validate-jwt.interface'
 export * from './api/AddQuestionApi.interface'
+export * from './api/LikeQuestionApi.interface'

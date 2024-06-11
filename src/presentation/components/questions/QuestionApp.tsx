@@ -3,8 +3,9 @@ import { QuestionApiInterface } from "../../../interfaces";
 import { AnswerApp } from "./AnswerApp"; // Asegúrate de importar tu componente de respuestas
 import { AuthContext } from "../../providers/auth/AuthProvider";
 import { AuthApp } from "../auth/AuthApp";
+import { addLikeQuestionUseCase, removeLikeQuestionUseCase } from "../../../core/use-cases";
 
-export const QuestionApp = ({ date, question, title, user, answers, likes, stars }: QuestionApiInterface) => {
+export const QuestionApp = ({ date, question, title, user, answers, likes, stars, id, _id }: QuestionApiInterface) => {
   const { isLogged, email, token } = useContext(AuthContext);
   const formattedDate = new Date(date).toLocaleDateString('es-MX');
   const allAnswersCount = answers.length;
@@ -27,18 +28,22 @@ export const QuestionApp = ({ date, question, title, user, answers, likes, stars
     setShowAnswers(!showAnswers);
   };
 
-  const onLike = ( token:string ) => {
+  const onLike = ( bearerToken:string ) => {
     if( isLoadingLike ) return;
     setIsLoadingLike(true);
 
     if ( isLiked ) {
       setLikesCount(likesCount - 1);
       setIsLiked(false);
-      // TODO: api
+      removeLikeQuestionUseCase({questionId: id! || _id!, token: bearerToken ? bearerToken : token})
+        .then( () => setIsLoadingLike(false) )
+        .catch( () => setIsLoadingLike(false) );
     } else {
       setLikesCount(likesCount + 1);
       setIsLiked(true);
-      //TODO: api
+      addLikeQuestionUseCase({questionId: id! || _id!, token: bearerToken ? bearerToken : token })
+        .then( () => setIsLoadingLike(false))
+        .catch( () => setIsLoadingLike(false) );
     }
   };
 

@@ -123,7 +123,7 @@ export const AuthApp = ( { succesLogin }: Props ) => {
               titleInitialValue={ userName }
               titleTex="Name"
               titleTitle="Email"
-              text="Please enter your details to be able to add comments."
+              text="Please sign in to access more personalized content."
               title="DevComplete Studios"
               typeTextModal="text"
               typeTitleModal="email"
