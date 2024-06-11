@@ -1,211 +1,128 @@
-import { EnterVerifyDataUseCase, addQuestionUseCase } from "../../../core/use-cases";
-import { verifyUserEmailUseCase } from "../../../core/use-cases/verify-user-email.useCase";
+import { FormEvent, useContext, useState } from "react";
+import { addQuestionUseCase } from "../../../core/use-cases";
 import { AuthContext } from "../../providers/auth/AuthProvider";
-import { LoadingApp } from "../loadings/LoadingApp";
-import { GenericModal } from "../modal/GenericModal";
-import { ModalInputText } from "../modal/ModalInputTextApp";
-import { ModalNumberInput } from "../modal/ModalNumberInput";
-import { useContext, useState } from 'react';
+import { AuthApp } from "../auth/AuthApp";
+import { AlertApp } from "../messages/AlertApp";
 
 
 
+interface Props {
+  addQuestionCallback: ( addQuestion:boolean ) => void;
+}
 
-export const AddQuestionApp = () => {
-  const { isLogged, login, token } = useContext( AuthContext );
 
-  const [isOpenCodeModal, setIsOpenCodeModal] = useState<boolean>(false);
-  const [isOpenUserModal, setIsOpenUserModal] = useState<boolean>(false);
-  const [codeVerify, setCodeVerify] = useState<number>(123456);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export const AddQuestionApp = ( { addQuestionCallback }: Props ) => {
+  const { isLogged, token } = useContext(AuthContext);
 
-  const [userName, setUserName] = useState<string>('');
-  const [userEmail, setUserEmail] = useState<string>('');
-
-  const [messageErrorUserData, setMessageErrorUserData] = useState('');
-  const [errorUserData, setErrorUserData] = useState(false);
-
-  const [messageErrorCodeVerify, setMessageErrorCodeVerify] = useState('');
-  const [errorCodeVerify, setErrorCodeVerify] = useState(false);
-
-  const [bearerToken, setBearerToken] = useState<string>();
-
-  const [showModalQuestion, setShowModalQuestion] = useState(false);
-  const [titleQuestion, setTitleQuestion] = useState<string>();
-  const [questionText, setQuestionText] = useState<string>();
+  const [titleQuestion, setTitleQuestion] = useState<string>('');
+  const [questionText, setQuestionText] = useState<string>('');
   const [errorQuestion, setErrorQuestion] = useState(false);
-  const [errorMessageQuestion, setErrorMessageQuestion] = useState<string>();
+  const [errorMessageQuestion, setErrorMessageQuestion] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [startLogin, setStartLogin] = useState(false);
+
+  const [rating, setRating] = useState<number>(0);
 
 
-
-
-
-  const onCloseCodeModal = () => {
-    setIsOpenCodeModal(false);
-  }
-
-
-  const onCloseUserModal = () => {
-    setIsOpenUserModal( false );
-  };
-
-
-  const onCodeSubmitCodeModal = async( code:number ) => {
-    // TODO: verificamos el código que ingreso
-    if( code !== codeVerify ){
-      setErrorCodeVerify( true )
-      setMessageErrorCodeVerify('The code does not match');
-      return;
-    }
-
+  const onSubmitModalQuestion = async ( bearerToken?:string ) => {
     setIsLoading(true);
 
-    // TODO: verificamos su cuenta
-    const res = await verifyUserEmailUseCase({email: userEmail, token: bearerToken!});
+    const res = await addQuestionUseCase({ question: { question:questionText, title: titleQuestion, stars:rating > 0 ? rating: 4 }, token: bearerToken ? bearerToken: token });
 
-    if( res.error ){
-      setErrorCodeVerify( true );
-      setMessageErrorCodeVerify( res.messageError! );
-      setIsLoading(false);
-      return;
-    };
-
-    setErrorCodeVerify( false );
-    setIsOpenCodeModal(false);
-
-    // TODO: iniciamos sesión del usuario
-    await login(bearerToken!);
-
-    setShowModalQuestion(true);
-
-    setIsLoading(false);
-  };
-
-
-  const onSubmitUserModal = ( name:string, email:string ) => {
-    setIsLoading( true );
-    setUserEmail(email);
-    setUserName(name);
-
-    EnterVerifyDataUseCase({name, email})
-      .then( data => {
-        if( data.error ){
-          setErrorUserData( data.error );
-          setMessageErrorUserData( data.messageError! );
-          setIsLoading( false );
-          return;
-        }
-
-        setErrorUserData( data.error );
-        setMessageErrorUserData('');
-        setBearerToken( data.token );
-
-        setCodeVerify( Number(data.codeVerify!) );
-        setIsOpenUserModal( false );
-        setIsOpenCodeModal( true );
-        setIsLoading( false );
-      })
-  };
-
-  const onClick = () => {
-    if( isLogged ){
-      // TODO: mostramos el modal si esta verificado
-      setShowModalQuestion(true);
-      return;
-    }
-
-    setIsOpenUserModal( true );
-  };
-
-
-
-  const onSubmitModalQuestion = async( titleQuestion:string, question:string ) => {
-    setQuestionText( question );
-    setTitleQuestion( titleQuestion )
-    setIsLoading(true);
-
-    // TODO: hacer la peticiom HTTP
-    const res = await addQuestionUseCase({question: {question: question, title: titleQuestion}, token});
-
-    if( res.error ){
+    if (res.error) {
       setErrorQuestion(true);
-      setErrorMessageQuestion(res.messageError);
+      setErrorMessageQuestion(res.messageError!);
       setIsLoading(false);
       return;
     }
 
     setErrorQuestion(false);
-    setShowModalQuestion(false);
     setQuestionText('');
-    setTitleQuestion('')
+    setTitleQuestion('');
+    setRating(0);
+    addQuestionCallback( true );
     setIsLoading(false);
-  }
+  };
 
+  const onSubmit = async( e: FormEvent<HTMLFormElement> ) => {
+    e.preventDefault();
 
+    if ( !isLogged ) {
+      setStartLogin(true);
+      return;
+    }
+
+    await onSubmitModalQuestion();
+  };
+
+  const handleStarClick = (index: number) => {
+    setRating(index + 1);
+  };
 
   return (
-    <div>
+    <>
+      {startLogin && <AuthApp succesLogin={ (_, bearerToken) => onSubmitModalQuestion( bearerToken ) } />}
 
-      {
-        (showModalQuestion && !isLoading)
-        &&
-        <ModalInputText
-          isOpen={showModalQuestion}
-          onClose={ () => setShowModalQuestion(false) }
-          onSubmit={ onSubmitModalQuestion }
-          textInitialValue={ questionText }
-          titleInitialValue={ titleQuestion }
-          titleTitle="Question"
-          titleTex="title"
-          text="Please enter your question or review details and it will be answered as soon as possible."
-          title="DevComplete Studios"
-          typeTextModal="text"
-          typeTitleModal="Textarea"
-          customError={ {messageError: errorMessageQuestion!, show:errorQuestion, errorAlert:true  } }
-        />
-      }
+      <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+        <h3 className="text-center text-2xl font-semibold text-gray-700 mb-6">Add a Review or Question</h3>
 
-      {
-        !isLoading
-        ?
-        <>
-        {
-          !showModalQuestion
-          &&
-          <>
-            <ModalNumberInput
-              isOpen={ isOpenCodeModal }
-              onClose={ onCloseCodeModal }
-              onCodeSubmit={ onCodeSubmitCodeModal }
-              text="A verification code has been sent to your email to verify your account."
-              customError={ {messageError: messageErrorCodeVerify, infoAlert:true, show: errorCodeVerify} }
+        <form className="space-y-6 aria-disabled:opacity-50" onSubmit={ onSubmit } aria-disabled={ isLoading }>
+          <div className="relative">
+            <input
+              type="text"
+              value={ titleQuestion }
+              onChange={(e) => setTitleQuestion(e.target.value)}
+              placeholder="Title"
+              className="peer h-12 w-full border border-gray-300 rounded-lg px-4 text-sm text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none transition placeholder-transparent"
             />
+            <label className="absolute left-4 top-2 text-gray-400 text-sm transform -translate-y-3 scale-75 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gray-500 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-blue-500">
+              Title
+            </label>
+          </div>
 
-            <ModalInputText
-              isOpen={ isOpenUserModal }
-              onClose={ onCloseUserModal }
-              onSubmit={ onSubmitUserModal }
-              textInitialValue={ userEmail }
-              titleInitialValue={ userName }
-              titleTex="Name"
-              titleTitle="Email"
-              text="Please enter your details to be able to add comments."
-              title="DevComplete Studios"
-              typeTextModal="text"
-              typeTitleModal="email"
-              customError={{ messageError:messageErrorUserData, show:errorUserData, errorAlert:true }}
-            />
-          </>
-        }
-        </>
-        : <GenericModal children={ <LoadingApp/>}/>
-      }
+          <div className="relative">
+            <textarea
+              value={questionText}
+              onChange={(e) => setQuestionText(e.target.value)}
+              placeholder="Your message"
+              className="peer h-32 w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none transition placeholder-transparent resize-none"
+            ></textarea>
+            <label className="absolute left-4 top-2 text-gray-400 text-sm transform -translate-y-3 scale-75 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-gray-500 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-3 peer-focus:text-blue-500">
+              Your comment
+            </label>
+          </div>
 
-      <p className="text-center mt-2 mb-8 font-normal px-4">
-        In this section you can see the questions and reviews, if you require it you can add them by
-        <a
-          onClick={ onClick }
-          className="underline text-blue-600 hover:cursor-pointer font-semibold"> Clicking on this link</a>.
-      </p>
-    </div>
-  )
-}
+          <div className="flex items-center">
+            {[...Array(5)].map((_, index) => (
+              <svg
+                key={index}
+                onClick={() => handleStarClick(index)}
+                className={`w-8 h-8 ms-3 cursor-pointer ${index < rating ? 'text-yellow-300' : 'text-gray-300'}`}
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 22 20"
+              >
+                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+              </svg>
+            ))}
+            <span className="ml-4 text-gray-700">{rating} / 5</span>
+          </div>
+
+          {
+            errorQuestion
+            &&
+            <AlertApp message={errorMessageQuestion} errorAlert/>
+          }
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
+    </>
+  );
+};

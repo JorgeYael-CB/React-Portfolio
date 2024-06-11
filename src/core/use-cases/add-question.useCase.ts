@@ -6,6 +6,7 @@ import { AddQuestionApiInterface } from "../../interfaces";
 interface Question {
   title:string;
   question:string;
+  stars?: number;
 }
 
 interface Props {

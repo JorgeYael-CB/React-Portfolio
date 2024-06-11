@@ -14,6 +14,7 @@ export const QuestionsApp = () => {
   const [limit, _] = useState(5);
   const [page, setPage] = useState(0);
   const [moreRecent, setMoreRecent] = useState(true);
+  const [addQuestionBool, setAddQuestionBool] = useState(false);
 
   const [data, setData] = useState<GetAllQuestionsApiInterface>();
   let error, questionsPagination, succes;
@@ -29,7 +30,7 @@ export const QuestionsApp = () => {
         setLoading( false );
       })
       .catch( err => console.log(err) );
-  }, [limit, page, moreRecent]);
+  }, [limit, page, moreRecent, addQuestionBool]);
 
 
   const nextPageValidate = ():boolean => {
@@ -59,10 +60,10 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="mt-28 mb-32 bg-white py-12 px-4 shadow-md rounded-md" id="questions">
+    <div className="md:my-56 my-44 bg-white py-12 px-4 shadow-md rounded-md" id="questions">
       <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
-      <AddQuestionApp/>
+      <AddQuestionApp addQuestionCallback={ (bool) => setAddQuestionBool(bool) }/>
 
       {
         data
