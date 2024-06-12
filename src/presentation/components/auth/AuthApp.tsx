@@ -10,10 +10,12 @@ import { verifyUserEmailUseCase } from "../../../core/use-cases/verify-user-emai
 
 interface Props {
   succesLogin:(bool: boolean, token:string) => void;
+  callbackCloseCodeModal: () => void;
+  callbackCloseUserModal: () => void;
 }
 
 
-export const AuthApp = ( { succesLogin }: Props ) => {
+export const AuthApp = ( { succesLogin, callbackCloseCodeModal, callbackCloseUserModal }: Props ) => {
   const { login } = useContext( AuthContext );
 
   const [isOpenCodeModal, setIsOpenCodeModal] = useState<boolean>(false);
@@ -33,14 +35,6 @@ export const AuthApp = ( { succesLogin }: Props ) => {
   const [bearerToken, setBearerToken] = useState<string>();
 
 
-
-  const onCloseCodeModal = () => {
-    setIsOpenCodeModal(false);
-  }
-
-  const onCloseUserModal = () => {
-    setIsOpenUserModal( false );
-  };
 
   const onCodeSubmitCodeModal = async( code:number ) => {
     // TODO: verificamos el código que ingreso
@@ -109,7 +103,7 @@ export const AuthApp = ( { succesLogin }: Props ) => {
           <>
             <ModalNumberInput
               isOpen={ isOpenCodeModal }
-              onClose={ onCloseCodeModal }
+              onClose={ callbackCloseCodeModal }
               onCodeSubmit={ onCodeSubmitCodeModal }
               text="A verification code has been sent to your email to verify your account."
               customError={ {messageError: messageErrorCodeVerify, infoAlert:true, show: errorCodeVerify} }
@@ -117,10 +111,10 @@ export const AuthApp = ( { succesLogin }: Props ) => {
 
             <ModalInputText
               isOpen={ isOpenUserModal }
-              onClose={ onCloseUserModal }
+              onClose={ callbackCloseUserModal }
               onSubmit={ onSubmitUserModal }
-              textInitialValue={ userEmail }
-              titleInitialValue={ userName }
+              textInitialValue={ userName }
+              titleInitialValue={ userEmail }
               titleTex="Name"
               titleTitle="Email"
               text="Please sign in to access more personalized content."

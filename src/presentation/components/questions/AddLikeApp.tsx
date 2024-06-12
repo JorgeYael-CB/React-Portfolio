@@ -88,7 +88,7 @@ export const AddLikeApp = ( { questionId , likes, onEventLike, urlApiAddLike, ur
   return (
     <>
       {
-        starAuth && <AuthApp succesLogin={ (_, bearerToken) => onLike( bearerToken ) }/>
+        starAuth && <AuthApp callbackCloseUserModal={ () => setStarAuth(false) } callbackCloseCodeModal={ () => setStarAuth(false) } succesLogin={ (_, bearerToken) => onLike( bearerToken ) }/>
       }
 
       <div className="flex gap-2">

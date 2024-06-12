@@ -62,7 +62,7 @@ export const AddAnswerToQuestionApp = ( { questionId, addAnswerCallback, closeAd
       {
         starAuthAnswer
         &&
-        <AuthApp succesLogin={ (_, bearerToken) => onSendAnswer(bearerToken) }/>
+        <AuthApp callbackCloseUserModal={ () => setStarAuthAnswer( false ) } callbackCloseCodeModal={ () => setStarAuthAnswer( false ) } succesLogin={ (_, bearerToken) => onSendAnswer(bearerToken) }/>
       }
       <div className="flex flex-col">
         <div>

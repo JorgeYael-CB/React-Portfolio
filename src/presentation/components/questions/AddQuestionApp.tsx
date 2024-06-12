@@ -61,7 +61,7 @@ export const AddQuestionApp = ( { addQuestionCallback }: Props ) => {
 
   return (
     <>
-      {startLogin && <AuthApp succesLogin={ (_, bearerToken) => onSubmitModalQuestion( bearerToken ) } />}
+      {startLogin && <AuthApp callbackCloseUserModal={ () => setStartLogin(false) } callbackCloseCodeModal={ () => setStartLogin(false) } succesLogin={ (_, bearerToken) => onSubmitModalQuestion( bearerToken ) } />}
 
       <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
         <h3 className="text-center text-2xl font-semibold text-gray-700 mb-6">Add a Review or Question</h3>
