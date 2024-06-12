@@ -1,4 +1,5 @@
 import { AnswerApiInterface } from "../../../interfaces/api/AnswerApi.interface";
+import { AddLikeApp } from "./AddLikeApp";
 
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 
 
 
-export const AnswerApp = ({ answerApp: { answer, date, user } }: Props) => {
+export const AnswerApp = ({ answerApp, answerApp: { answer, date, user, likes, _id } }: Props) => {
   const formattedDate = new Date(date).toLocaleString("es-MX", { dateStyle: "short", timeStyle: "short" });
 
   return (
@@ -26,14 +27,9 @@ export const AnswerApp = ({ answerApp: { answer, date, user } }: Props) => {
       <p className="text-gray-600 font-medium mt-2">{answer}</p>
       <div className="flex justify-between items-center mt-4">
         <p className="text-sm font-medium text-gray-400">{ formattedDate }</p>
-        <div className="flex items-center">
-          <button className="like-button flex items-center text-gray-500 hover:text-red-500 transition duration-300 ease-in-out">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path>
-            </svg>
-          </button>
-          <p className="ml-2 text-sm font-medium text-gray-400">{5}</p>
-        </div>
+
+        <AddLikeApp answerId={_id} urlApiAddLike='/answers/add-like' urlApiRemoveLike='/answers/remove-like' likes={ likes } />
+
       </div>
     </div>
   );

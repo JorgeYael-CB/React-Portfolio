@@ -60,7 +60,7 @@ export const QuestionsApp = () => {
   };
 
   return (
-    <div className="md:my-56 my-44 bg-white py-12 shadow-md rounded-md" id="questions">
+    <div className="md:my-56 my-44 bg-gray-50 py-12 shadow-md rounded-md" id="questions">
       <h2 className="text-center text-4xl font-semibold text-blue-600 mb-8">Questions and reviews</h2>
 
       <AddQuestionApp addQuestionCallback={ (bool) => setAddQuestionBool(bool) }/>

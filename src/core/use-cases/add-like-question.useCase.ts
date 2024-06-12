@@ -5,11 +5,12 @@ import { AddLikeQuestionApiInterface } from "../../interfaces";
 interface Props {
   urlApi?:string;
   token:string;
-  questionId:string
+  questionId?:string;
+  answerId?:string;
 }
 
 
-export const addLikeQuestionUseCase = async( { questionId, token, urlApi = '/questions/add-like' }: Props ):Promise< AddLikeQuestionApiInterface > => {
+export const addLikeQuestionUseCase = async( { questionId, token, urlApi = '/questions/add-like', answerId }: Props ):Promise< AddLikeQuestionApiInterface > => {
   const url = `${envs.API_URL}${urlApi}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -17,7 +18,7 @@ export const addLikeQuestionUseCase = async( { questionId, token, urlApi = '/que
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     },
-    body: JSON.stringify({questionId}),
+    body: JSON.stringify({questionId, answerId}),
   });
 
   return await res.json();
