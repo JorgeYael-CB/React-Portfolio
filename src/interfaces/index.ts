@@ -7,3 +7,4 @@ export * from './api/VerifyEmailApi.interface';
 export * from './api/validate-jwt.interface'
 export * from './api/AddQuestionApi.interface'
 export * from './api/LikeQuestionApi.interface'
+export * from './api/ResponseApiInterface'

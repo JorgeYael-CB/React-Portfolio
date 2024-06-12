@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import { ContactData, ResponseApiInterface } from "../../../interfaces";
+import { ResponseApiInterface } from "../../../interfaces";
 import { AlertApp } from "../messages/AlertApp";
 import { LoadingApp } from "../loadings/LoadingApp";
 import { ContactByEmailUsecase } from "../../../core/use-cases";

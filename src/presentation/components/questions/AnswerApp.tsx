@@ -8,7 +8,7 @@ interface Props {
 
 
 
-export const AnswerApp = ({ answerApp, answerApp: { answer, date, user, likes, _id } }: Props) => {
+export const AnswerApp = ({ answerApp: { answer, date, user, likes, _id } }: Props) => {
   const formattedDate = new Date(date).toLocaleString("es-MX", { dateStyle: "short", timeStyle: "short" });
 
   return (

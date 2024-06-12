@@ -50,8 +50,8 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
           setAuthState({
             isLogged: true,
             token,
-            name: user.user.name,
-            email: user.user.email,
+            name: user.user!.name,
+            email: user.user!.email,
           });
         } else {
           logout();
@@ -70,8 +70,8 @@ export default function AuthProvider({ children }: { children: ReactNode }): Rea
       setAuthState({
         isLogged: true,
         token,
-        name: user.user.name,
-        email: user.user.email,
+        name: user.user!.name,
+        email: user.user!.email,
       });
     }
   };

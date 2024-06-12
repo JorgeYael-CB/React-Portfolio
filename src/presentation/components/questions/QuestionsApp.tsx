@@ -13,7 +13,7 @@ export const QuestionsApp = () => {
   const [loading, setLoading] = useState(true);
   const [limit, _] = useState(5);
   const [page, setPage] = useState(0);
-  const [moreRecent, setMoreRecent] = useState(true);
+  const [moreRecent, ] = useState(true);
   const [addQuestionBool, setAddQuestionBool] = useState(false);
 
   const [data, setData] = useState<GetAllQuestionsApiInterface>();
