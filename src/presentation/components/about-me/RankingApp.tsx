@@ -16,25 +16,25 @@ export const RankingApp = () => {
             +
             {inView && <CountUp end={4.5} duration={4} decimals={1} decimal="." />}
           </div>
-          <p className="text-gray-600">Calificación promedio</p>
+          <p className="text-gray-600">Average Mark</p>
         </div>
         <div>
           <div className="text-5xl font-bold text-indigo-600">
             +
             {inView && <CountUp end={10} duration={4} />}
           </div>
-          <p className="text-gray-600">Proyectos</p>
+          <p className="text-gray-600">Projects</p>
         </div>
         <div>
           <div className="text-5xl font-bold text-indigo-600">
             +
             {inView && <CountUp end={100} duration={4} />}
           </div>
-          <p className="text-gray-600">Usuarios con reseña</p>
+          <p className="text-gray-600">Users</p>
         </div>
         <div>
           <p className="text-5xl font-bold text-indigo-600">+1</p>
-          <p className="text-gray-600">Año de experiencia</p>
+          <p className="text-gray-600">Experience</p>
         </div>
       </div>
     </div>
