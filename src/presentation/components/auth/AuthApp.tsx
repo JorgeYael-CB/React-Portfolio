@@ -119,8 +119,6 @@ export const AuthApp = ( { succesLogin, callbackCloseCodeModal, callbackCloseUse
               titleTitle="Email"
               text="Please sign in to access more personalized content."
               title="DevComplete Studios"
-              typeTextModal="text"
-              typeTitleModal="email"
               customError={{ messageError:messageErrorUserData, show:errorUserData, errorAlert:true }}
             />
           </>

@@ -1,4 +1,3 @@
-// UserModal.tsx
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { AlertApp } from '../messages/AlertApp';
 
@@ -8,33 +7,36 @@ interface UserModalProps {
   onSubmit: (name: string, email: string) => void;
   title?: string;
   text?: string;
-  titleInitialValue?:string
-  textInitialValue?:string
+  titleInitialValue?: string;
+  textInitialValue?: string;
   customError?: CustomError;
-  titleTex?:string;
-  titleTitle?:string;
-  typeTextModal: 'Textarea' | 'email' | 'text';
-  typeTitleModal: 'Textarea' | 'email' | 'text';
+  titleTex?: string;
+  titleTitle?: string;
 }
 
 interface CustomError {
-  messageError:string;
-  infoAlert?:boolean;
-  errorAlert?:boolean;
-  succesAlert?:boolean;
+  messageError: string;
+  infoAlert?: boolean;
+  errorAlert?: boolean;
+  succesAlert?: boolean;
   show: boolean;
 }
 
-
-
-export const ModalInputText: FC<UserModalProps> = (
-  { isOpen, onClose, onSubmit, typeTitleModal, title = 'User Information', text = 'Please enter the data', titleInitialValue = '', textInitialValue = '', customError, titleTex, titleTitle, typeTextModal }
-) => {
+export const ModalInputText: FC<UserModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  title = 'User Information',
+  text = 'Please enter the data',
+  titleInitialValue = '',
+  textInitialValue = '',
+  customError,
+  titleTex,
+  titleTitle
+}) => {
   const [name, setName] = useState<string>(textInitialValue);
   const [email, setEmail] = useState<string>(titleInitialValue);
   const [modalOpen, setModalOpen] = useState<boolean>(isOpen);
-
-
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,83 +58,51 @@ export const ModalInputText: FC<UserModalProps> = (
   if (!modalOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl mb-1 font-bold text-center"> {title} </h2>
-        <p className='text-center text-sm font-normal mb-4'>
-          { text }
-        </p>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 animate__animated animate__fadeIn">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h2 className="text-2xl mb-4 font-semibold text-center text-gray-800">{title}</h2>
+        <p className='text-center text-gray-600 mb-6'>{text}</p>
         <form onSubmit={handleSubmit}>
+          <div className="mb-5">
+            <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="text">
+              {titleTex}
+            </label>
+            <input
+              type='text'
+              id="text"
+              value={name}
+              onChange={handleNameChange}
+              className="border border-gray-300 p-3 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          {
-            titleTex
-            &&
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="text">
-                { titleTex }
-              </label>
-              {
-                typeTextModal === 'email' || typeTextModal === 'text'
-                  ?
-                    <input
-                      type={ typeTextModal === 'text' ? 'text' : 'email' }
-                      id="text"
-                      value={name}
-                      onChange={ handleNameChange }
-                      className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                :
-                <textarea
-                  id="text"
-                  value={name}
-                  onChange={ handleNameChange }
-                  className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                </textarea>
-              }
-            </div>
-          }
+          <div className="mb-5">
+            <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor="title">
+              {titleTitle}
+            </label>
+            <input
+              type='email'
+              id="title"
+              value={email}
+              onChange={handleEmailChange}
+              className="border border-gray-300 p-3 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-          {
-            titleTitle
-            &&
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-                { titleTitle }
-              </label>
-              {
-                typeTitleModal === 'email' || typeTitleModal === 'text'
-                ?
-                  <input
-                    type={ typeTitleModal === 'text' ? 'text' : 'email' }
-                    id="title"
-                    value={ email }
-                    onChange={ handleEmailChange }
-                    className="border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                :
-                <textarea
-                  id="title"
-                  value={ email }
-                  onChange={ handleEmailChange }
-                  className="resize-none border p-2 mb-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                </textarea>
-              }
-            </div>
-          }
-
-          {
-            (customError && customError.show)
-            &&
-            <AlertApp message={customError.messageError} errorAlert={customError.errorAlert} infoAlert={customError.infoAlert} succesAlert={customError.succesAlert}/>
-          }
+          {customError && customError.show && (
+            <AlertApp
+              message={customError.messageError}
+              errorAlert={customError.errorAlert}
+              infoAlert={customError.infoAlert}
+              succesAlert={customError.succesAlert}
+            />
+          )}
 
           <div className="flex justify-end">
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded mr-2 hover:bg-blue-600">
+            <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 ease-in-out">
               Submit
             </button>
-            <button type="button" onClick={onClose} className="bg-gray-500 text-white p-2 rounded hover:bg-gray-600">
+            <button type="button" onClick={onClose} className="bg-gray-600 text-white px-4 py-2 rounded ml-2 hover:bg-gray-700 transition duration-200 ease-in-out">
               Close
             </button>
           </div>

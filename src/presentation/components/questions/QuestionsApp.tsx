@@ -82,7 +82,7 @@ export const QuestionsApp = () => {
       </div>
 
       {
-        data
+        (data && questionsPagination!.elements.length > 0)
         &&
         <PaginationTemplateApp
           isLoading={loading}

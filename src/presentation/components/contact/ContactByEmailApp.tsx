@@ -57,7 +57,7 @@ export const ContactByEmailApp = () => {
 
 
   return (
-    <div className="shadow-md rounded-md max-w-3xl md:w-full w-5/6 mx-auto bg-gray-50 py-3 mt-8">
+    <div className="shadow-md rounded-md max-w-3xl md:w-full w-5/6 mx-auto bg-gray-50 py-3 mt-48">
         <h2 className="text-center text-blue-600 font-semibold text-3xl">Contact me</h2>
         <div className="flex items-center justify-center p-10">
           <div className="mx-auto w-full max-w-[550px]">

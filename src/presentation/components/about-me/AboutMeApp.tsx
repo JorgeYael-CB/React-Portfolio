@@ -8,7 +8,7 @@ export const AboutMeApp = () => {
         <div className="flex flex-col md:flex-row items-center justify-center">
           <div className="text-gray-700 text-lg leading-relaxed">
             <p className="mb-4">
-              Hello! I'm Jorge Yael CB, a passionate Backend Web Developer focused on creating efficient and innovative solutions. I have experience in Node.js, Express.js, and other backend technologies.
+              Hello! I'm Jorge Yael CB, a passionate Backend Web Developer focused on creating efficient and innovative solutions. I have experience in Node.js, Express.js, and I specialize in the development of REST APIs and other backend technologies.
               My goal is to develop high-quality web applications that meet clients' needs and exceed their expectations. I am constantly learning and improving my skills to stay updated with industry trends.
             </p>
             <p className="mb-4">

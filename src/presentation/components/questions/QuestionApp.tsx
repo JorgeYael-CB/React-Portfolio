@@ -27,11 +27,10 @@ export const QuestionApp = ({ date, question, title, user, answers, likes, stars
           <div className="flex items-center">
             <div className="ml-2">
               <p className="md:text-lg text-sm font-medium text-gray-500">{user.name}</p>
-              <span className="text-xs text-gray-500">{user.verify ? "Verificado" : "No verificado"}</span>
             </div>
           </div>
           <span className={`md:text-sm text-xs font-medium ${user.verify ? "text-green-500" : "text-red-500"}`}>
-            {user.verify ? "Usuario Verificado" : "Usuario No Verificado"}
+            {user.verify ? "User verify" : "User not verify"}
           </span>
         </div>
 
